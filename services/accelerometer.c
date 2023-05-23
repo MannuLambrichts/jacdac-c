@@ -250,7 +250,7 @@ void accelerometer_init(const accelerometer_api_t *api) {
 #endif
 }
 
-#ifdef JD_DCFG
+#if JD_DCFG
 static int8_t acc_idx[3] = {1, 2, 3};
 __attribute__((weak)) void accelerometer_data_transform(int32_t data[3]) {
     int32_t tmp[3];

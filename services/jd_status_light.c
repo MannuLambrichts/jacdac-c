@@ -405,7 +405,7 @@ void jd_glow(uint32_t glow) {
     re_glow(state);
 }
 
-#ifdef JD_DCFG
+#if JD_DCFG
 static uint16_t led_period;
 static bool led_active_high;
 static bool has_led;
