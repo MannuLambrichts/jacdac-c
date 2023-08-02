@@ -25,9 +25,7 @@ char *jd_srvcfg_key(const char *key) {
 }
 
 uint8_t jd_srvcfg_pin(const char *key) {
-    // const char *lbl = dcfg_get_string(jd_srvcfg_key(key), NULL);
-    // if (lbl == NULL)
-    return dcfg_get_i32(jd_srvcfg_key(key), NO_PIN);
+    return dcfg_get_pin(jd_srvcfg_key(key));
 }
 
 int32_t jd_srvcfg_i32(const char *key, int32_t defl) {
@@ -59,6 +57,8 @@ void lightbulb_config(void);
 void buzzer_config(void);
 void servo_config(void);
 void motion_config(void);
+void motor_config(void);
+void gamepad_config(void);
 
 static const jd_srvcfg_entry_t jd_srvcfg_entries[] = { //
 #if !JD_HOSTED
@@ -69,6 +69,7 @@ static const jd_srvcfg_entry_t jd_srvcfg_entries[] = { //
 #if JD_ANALOG
     {"flex", flex_config},
     {"analog", analog_config},
+    {"gamepad", gamepad_config},
 #endif
     {"accelerometer", accelerometer_config},
     {"power", power_config},
@@ -76,6 +77,7 @@ static const jd_srvcfg_entry_t jd_srvcfg_entries[] = { //
     {"buzzer", buzzer_config},
     {"servo", servo_config},
     {"motion", motion_config},
+    {"motor", motor_config},
 #if JD_HID
     {"hidMouse", hidmouse_init},
     {"hidKeyboard", hidkeyboard_init},
@@ -86,7 +88,7 @@ static const jd_srvcfg_entry_t jd_srvcfg_entries[] = { //
 
 uint8_t _jd_services_curr_idx(void);
 
-void jd_srvcfg_run() {
+void jd_srvcfg_run(void) {
     JD_ASSERT(jd_srvcfg_idx == 0);
     memset(jd_srvcfg_idx_map, 0xff, sizeof(jd_srvcfg_idx_map));
 

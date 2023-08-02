@@ -298,10 +298,11 @@ int jd_net_send_frame(void *frame);
 
 // settings stuff
 #ifndef JD_SETTINGS_LARGE
-#define JD_SETTINGS_LARGE 0
+#define JD_SETTINGS_LARGE JD_DEVICESCRIPT
 #endif
 
 #ifndef JD_FSTOR_HEADER_PAGES
+// if JD_SETTINGS_LARGE, this is just the minimum
 #define JD_FSTOR_HEADER_PAGES 1
 #endif
 
@@ -367,7 +368,7 @@ int jd_net_send_frame(void *frame);
 #endif
 
 #ifndef JD_ANALOG
-#define JD_ANALOG 1
+#define JD_ANALOG (!JD_HOSTED)
 #endif
 
 #ifndef JD_SPI

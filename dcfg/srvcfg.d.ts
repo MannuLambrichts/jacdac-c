@@ -1,10 +1,10 @@
 declare module "@devicescript/srvcfg" {
     type integer = number
     /**
-     * Hardware pin number. In future we may allow labels.
+     * Hardware pin number or label.
      * Naming convention - fields with `Pin` type start with `pin*`
      */
-    type Pin = integer
+    type Pin = integer | string
     type IOPin = Pin
     type InputPin = Pin
     type OutputPin = Pin
@@ -19,6 +19,7 @@ declare module "@devicescript/srvcfg" {
         | RelayConfig
         | PowerConfig
         | MotionConfig
+        | MotorConfig
         | LightBulbConfig
         | BuzzerConfig
         | ServoConfig
@@ -32,6 +33,7 @@ declare module "@devicescript/srvcfg" {
         | HidJoystickConfig
         | HidKeyboardConfig
         | HidMouseConfig
+        | GamepadConfig
 
     interface DeviceHardwareInfo {
         /**
@@ -174,123 +176,213 @@ declare module "@devicescript/srvcfg" {
      * Pin labels starting with '@' are hidden to the user.
      */
     interface PinLabels extends JsonComment {
-        TX?: Pin
-        RX?: Pin
-        VP?: Pin
-        VN?: Pin
-        BOOT?: Pin
-        LED?: Pin
-        LED0?: Pin
-        LED1?: Pin
-        LED2?: Pin
-        LED3?: Pin
+        TX?: integer
+        RX?: integer
+        VP?: integer
+        VN?: integer
+        BOOT?: integer
+        PWR?: integer
+        LED_PWR?: integer
+        LED?: integer
+        LED0?: integer
+        LED1?: integer
+        LED2?: integer
+        LED3?: integer
 
-        SDA?: Pin
-        SCL?: Pin
+        CS?: integer
 
-        MISO?: Pin
-        MOSI?: Pin
-        SCK?: Pin
-        CS?: Pin
+        A0?: integer
+        A1?: integer
+        A2?: integer
+        A3?: integer
+        A4?: integer
+        A5?: integer
+        A6?: integer
+        A7?: integer
+        A8?: integer
+        A9?: integer
+        A10?: integer
+        A11?: integer
+        A12?: integer
+        A13?: integer
+        A14?: integer
+        A15?: integer
 
-        A0?: Pin
-        A1?: Pin
-        A2?: Pin
-        A3?: Pin
-        A4?: Pin
-        A5?: Pin
-        A6?: Pin
-        A7?: Pin
-        A8?: Pin
-        A9?: Pin
-        A10?: Pin
-        A11?: Pin
-        A12?: Pin
-        A13?: Pin
-        A14?: Pin
-        A15?: Pin
+        D0?: integer
+        D1?: integer
+        D2?: integer
+        D3?: integer
+        D4?: integer
+        D5?: integer
+        D6?: integer
+        D7?: integer
+        D8?: integer
+        D9?: integer
+        D10?: integer
+        D11?: integer
+        D12?: integer
+        D13?: integer
+        D14?: integer
+        D15?: integer
 
-        D0?: Pin
-        D1?: Pin
-        D2?: Pin
-        D3?: Pin
-        D4?: Pin
-        D5?: Pin
-        D6?: Pin
-        D7?: Pin
-        D8?: Pin
-        D9?: Pin
-        D10?: Pin
-        D11?: Pin
-        D12?: Pin
-        D13?: Pin
-        D14?: Pin
-        D15?: Pin
+        P0?: integer
+        P1?: integer
+        P2?: integer
+        P3?: integer
+        P4?: integer
+        P5?: integer
+        P6?: integer
+        P7?: integer
+        P8?: integer
+        P9?: integer
+        P10?: integer
+        P11?: integer
+        P12?: integer
+        P13?: integer
+        P14?: integer
+        P15?: integer
+        P16?: integer
+        P17?: integer
+        P18?: integer
+        P19?: integer
+        P20?: integer
+        P21?: integer
+        P22?: integer
+        P23?: integer
+        P24?: integer
+        P25?: integer
+        P26?: integer
+        P27?: integer
+        P28?: integer
+        P29?: integer
+        P30?: integer
+        P31?: integer
+        P32?: integer
+        P33?: integer
+        P34?: integer
+        P35?: integer
+        P36?: integer
+        P37?: integer
+        P38?: integer
+        P39?: integer
+        P40?: integer
+        P41?: integer
+        P42?: integer
+        P43?: integer
+        P44?: integer
+        P45?: integer
+        P46?: integer
+        P47?: integer
+        P48?: integer
+        P49?: integer
+        P50?: integer
+        P51?: integer
+        P52?: integer
+        P53?: integer
+        P54?: integer
+        P55?: integer
+        P56?: integer
+        P57?: integer
+        P58?: integer
+        P59?: integer
+        P60?: integer
+        P61?: integer
+        P62?: integer
+        P63?: integer
 
-        P0?: Pin
-        P1?: Pin
-        P2?: Pin
-        P3?: Pin
-        P4?: Pin
-        P5?: Pin
-        P6?: Pin
-        P7?: Pin
-        P8?: Pin
-        P9?: Pin
-        P10?: Pin
-        P11?: Pin
-        P12?: Pin
-        P13?: Pin
-        P14?: Pin
-        P15?: Pin
-        P16?: Pin
-        P17?: Pin
-        P18?: Pin
-        P19?: Pin
-        P20?: Pin
-        P21?: Pin
-        P22?: Pin
-        P23?: Pin
-        P24?: Pin
-        P25?: Pin
-        P26?: Pin
-        P27?: Pin
-        P28?: Pin
-        P29?: Pin
-        P30?: Pin
-        P31?: Pin
-        P32?: Pin
-        P33?: Pin
-        P34?: Pin
-        P35?: Pin
-        P36?: Pin
-        P37?: Pin
-        P38?: Pin
-        P39?: Pin
-        P40?: Pin
-        P41?: Pin
-        P42?: Pin
-        P43?: Pin
-        P44?: Pin
-        P45?: Pin
-        P46?: Pin
-        P47?: Pin
-        P48?: Pin
-        P49?: Pin
-        P50?: Pin
-        P51?: Pin
-        P52?: Pin
-        P53?: Pin
-        P54?: Pin
-        P55?: Pin
-        P56?: Pin
-        P57?: Pin
-        P58?: Pin
-        P59?: Pin
-        P60?: Pin
-        P61?: Pin
-        P62?: Pin
-        P63?: Pin
+        GP0?: integer
+        GP1?: integer
+        GP2?: integer
+        GP3?: integer
+        GP4?: integer
+        GP5?: integer
+        GP6?: integer
+        GP7?: integer
+        GP8?: integer
+        GP9?: integer
+        GP10?: integer
+        GP11?: integer
+        GP12?: integer
+        GP13?: integer
+        GP14?: integer
+        GP15?: integer
+        GP16?: integer
+        GP17?: integer
+        GP18?: integer
+        GP19?: integer
+        GP20?: integer
+        GP21?: integer
+        GP22?: integer
+        GP23?: integer
+        GP24?: integer
+        GP25?: integer
+        GP26?: integer
+        GP27?: integer
+        GP28?: integer
+        GP29?: integer
+        GP30?: integer
+        GP31?: integer
+        GP32?: integer
+        GP33?: integer
+        GP34?: integer
+        GP35?: integer
+        GP36?: integer
+        GP37?: integer
+        GP38?: integer
+        GP39?: integer
+        GP40?: integer
+        GP41?: integer
+        GP42?: integer
+        GP43?: integer
+        GP44?: integer
+        GP45?: integer
+        GP46?: integer
+        GP47?: integer
+        GP48?: integer
+        GP49?: integer
+        GP50?: integer
+        GP51?: integer
+        GP52?: integer
+        GP53?: integer
+        GP54?: integer
+        GP55?: integer
+        GP56?: integer
+        GP57?: integer
+        GP58?: integer
+        GP59?: integer
+        GP60?: integer
+        GP61?: integer
+        GP62?: integer
+        GP63?: integer
+
+        // RP2040
+        GP26_A0?: integer
+        GP27_A1?: integer
+        GP28_A2?: integer
+
+        // Xiao/QT-Py pinout
+        A0_D0?: integer
+        A1_D1?: integer
+        A2_D2?: integer
+        A3_D3?: integer
+        SDA_D4?: integer
+        SCL_D5?: integer
+        TX_D6?: integer
+        RX_D7?: integer
+        SCK_D8?: integer
+        MISO_D9?: integer
+        MOSI_D10?: integer
+
+        // Feather pin names (in addition to A0, A1, ..., D10, ...)
+        A4_D24?: integer
+        A5_D25?: integer
+        RX_D0?: integer
+        TX_D1?: integer
+        SDA?: integer
+        SCL?: integer
+        MISO?: integer
+        MOSI?: integer
+        SCK?: integer
     }
 
     interface BaseServiceConfig extends JsonComment {
@@ -425,6 +517,25 @@ declare module "@devicescript/srvcfg" {
          * When unset, the `pin` will be set to `0` when no sound is playing.
          */
         activeLow?: boolean
+    }
+
+    interface MotorConfig extends BaseServiceConfig {
+        service: "motor"
+
+        /**
+         * The channel 1 pin.
+         */
+        pin1: OutputPin
+
+        /**
+         * The channel 2 pin.
+         */
+        pin2?: OutputPin
+
+        /**
+         * The enable (NSLEEP) pin if any, active high.
+         */
+        pinEnable?: OutputPin
     }
 
     interface ServoConfig extends BaseServiceConfig {
@@ -571,6 +682,88 @@ declare module "@devicescript/srvcfg" {
          * @default 3
          */
         trZ?: integer
+    }
+
+    interface GamepadConfig extends BaseServiceConfig {
+        service: "gamepad"
+
+        // Digital
+
+        /**
+         * Pin for button Left
+         */
+        pinLeft?: InputPin
+        /**
+         * Pin for button Up
+         */
+        pinUp?: InputPin
+        /**
+         * Pin for button Right
+         */
+        pinRight?: InputPin
+        /**
+         * Pin for button Down
+         */
+        pinDown?: InputPin
+        /**
+         * Pin for button A
+         */
+        pinA?: InputPin
+        /**
+         * Pin for button B
+         */
+        pinB?: InputPin
+        /**
+         * Pin for button Menu
+         */
+        pinMenu?: InputPin
+        /**
+         * Pin for button Select
+         */
+        pinSelect?: InputPin
+        /**
+         * Pin for button Reset
+         */
+        pinReset?: InputPin
+        /**
+         * Pin for button Exit
+         */
+        pinExit?: InputPin
+        /**
+         * Pin for button X
+         */
+        pinX?: InputPin
+        /**
+         * Pin for button Y
+         */
+        pinY?: InputPin
+
+        /**
+         * Buttons are normally active-low and pulled high.
+         * This makes them active-high and pulled low.
+         */
+        activeHigh?: boolean
+
+        // Analog
+        /**
+         * When gamepad is analog, set this to horizontal pin.
+         */
+        pinAX?: AnalogInPin
+
+        /**
+         * When gamepad is analog, set this to vertical pin.
+         */
+        pinAY?: AnalogInPin
+
+        /**
+         * Pin to pull low before analog read and release afterwards.
+         */
+        pinLow?: OutputPin
+
+        /**
+         * Pin to pull high before analog read and release afterwards.
+         */
+        pinHigh?: OutputPin
     }
 
     interface AnalogConfig extends BaseServiceConfig {

@@ -30,7 +30,7 @@ void jd_seed_random(uint32_t s) {
     seed = (seed * 0x1000193) ^ s;
 }
 
-uint32_t jd_random() {
+uint32_t jd_random(void) {
     if (seed == 0)
         jd_seed_random(13);
 
@@ -205,7 +205,10 @@ int jd_from_hex(void *dst, const char *src) {
         if (prev == 0)
             prev = (v << 4) | 0x100; // make sure it's not zero
         else {
-            *dp++ = (prev | v) & 0xff;
+            if (dst)
+                *dp++ = (prev | v) & 0xff;
+            else
+                dp++;
             prev = 0;
         }
     }
