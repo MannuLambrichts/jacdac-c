@@ -187,20 +187,24 @@ srv_t *jd_allocate_service(const srv_vt_t *vt) {
 void jd_deallocate_service(const uint8_t service_index) {
 	srv_t* tmp[num_services - 1];
 	uint8_t idx = 0;
-
+	uint8_t idx_reset = 0xFF;
 	// save all other available services to a temporary list
 	for (int i = 0; i < num_services; ++i) {
-		if (i == service_index)
+		if (services[i]->service_index == service_index) {
+			idx_reset = i;
 			continue;
+		}
 		tmp[idx++] = services[i];
 	}
 
 	// free the referred service
-	jd_free(services[service_index]);
-	num_services -= 1;
+	if (idx_reset != 0xFF) {
+		jd_free(services[idx_reset]);
+		num_services -= 1;
 
-	// copy remaining services back
-	memcpy(services, tmp, sizeof(void *) * num_services);
+		// copy remaining services back
+		memcpy(services, tmp, sizeof(void *) * num_services);
+	}
 }
 
 uint8_t _jd_services_curr_idx(void) {
