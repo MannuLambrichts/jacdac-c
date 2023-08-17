@@ -13,7 +13,7 @@
 #define IN_SERV_SLEEP 0xfe
 
 static srv_t **services;
-static uint8_t num_services, reset_counter, packets_sent;
+static uint8_t num_services, reset_counter, packets_sent, service_counter;
 static uint8_t curr_service_process;
 static uint32_t lastMax, nextAnnounce;
 
@@ -176,12 +176,31 @@ srv_t *jd_allocate_service(const srv_vt_t *vt) {
         JD_PANIC();
     srv_t *r = jd_alloc(vt->state_size);
     r->vt = vt;
-    r->service_index = num_services;
+    r->service_index = service_counter++;
     // sleeping is allowed in service init
     curr_service_process = IN_SERV_INIT;
     services[num_services++] = r;
 
     return r;
+}
+
+void jd_deallocate_service(const uint8_t service_index) {
+	srv_t* tmp[num_services - 1];
+	uint8_t idx = 0;
+
+	// save all other available services to a temporary list
+	for (int i = 0; i < num_services; ++i) {
+		if (i == service_index)
+			continue;
+		tmp[idx++] = services[i];
+	}
+
+	// free the referred service
+	jd_free(services[service_index]);
+	num_services -= 1;
+
+	// copy remaining services back
+	memcpy(services, tmp, sizeof(void *) * num_services);
 }
 
 uint8_t _jd_services_curr_idx(void) {
@@ -190,6 +209,7 @@ uint8_t _jd_services_curr_idx(void) {
 
 void jd_services_init(void) {
     num_services = 0;
+	service_counter = 0;
     srv_t *tmp[JD_MAX_SERVICES];
     services = tmp;
 
@@ -213,7 +233,7 @@ void jd_services_init(void) {
     lastMax = tim_get_micros();
 }
 
-void jd_services_deinit(void) {
+void jd_services_deinit(void) {	
     for (int i = 0; i < num_services; ++i)
         jd_free(services[i]);
     jd_free(services);

@@ -77,6 +77,7 @@ struct srv_state_common {
 typedef struct srv_state_common srv_common_t;
 
 srv_t *jd_allocate_service(const srv_vt_t *vt);
+void jd_deallocate_service(const uint8_t service_index);
 
 /**
  * Interprets packet as a register read/write, based on REG_DEFINITION() passed as 'sdesc'.
