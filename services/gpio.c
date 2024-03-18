@@ -26,8 +26,6 @@ struct srv_state {
     pin_desc_t *pins;
 };
 
-static srv_t *gpiosrv_state;
-
 REG_DEFINITION(                   //
     gpiosrv_regs,                 //
     REG_SENSOR_COMMON,            //
@@ -154,9 +152,11 @@ void gpiosrv_handle_packet(srv_t *state, jd_packet_t *pkt) {
     }
 }
 
+#if JD_DCFG
 SRV_DEF(gpiosrv, JD_SERVICE_CLASS_GPIO);
 
-#if JD_DCFG
+static srv_t *gpiosrv_state;
+
 static bool valid_pin(const char *name) {
     return name[5] != '@' && dcfg_get_pin(name) != NO_PIN;
 }
