@@ -3,6 +3,12 @@
 
 #include "jd_protocol.h"
 
+#include "core.h"
+#include "platform.h"
+LOG_MODULE_REGISTER(jd_physical, LOG_LEVEL_DBG);
+
+#include "hal/nrf_gpio.h"
+
 #if JD_PHYSICAL
 
 // Enabling logging can cause delays and dropped packets!
@@ -129,12 +135,14 @@ static void rx_timeout(void) {
 }
 
 static void setup_rx_timeout(void) {
+    
     target_disable_irq();
     // It's possible this only gets executed after the entire reception process has finished.
     // In that case, we don't want to set the rx_timeout().
     if (phys_status & JD_STATUS_RX_ACTIVE) {
         uart_flush_rx();
         uint32_t *p = (uint32_t *)&rxFrame;
+        //LG_INFO("rxFrame: %d %d %d %d", p[0], p[1], p[2], p[3]);
         if (p[0] == 0 && p[1] == 0) {
             rx_timeout(); // didn't get any data after lo-pulse
         } else {
@@ -145,11 +153,11 @@ static void setup_rx_timeout(void) {
         set_tick_timer(0);
     }
     target_enable_irq();
+    
 }
 
 void jd_line_falling(void) {
     LOG("line fall");
-
     jd_debug_signal_read(1);
 
     // target_disable_irq();
@@ -182,7 +190,7 @@ void jd_line_falling(void) {
     if (phys_status & JD_STATUS_RX_ACTIVE)
         tim_set_timer(250, setup_rx_timeout);
 
-    // target_enable_irq();
+    // target_enable_irq(); #
 }
 
 void jd_rx_completed(int dataLeft) {
@@ -199,6 +207,10 @@ void jd_rx_completed(int dataLeft) {
     }
 
     if (dataLeft < 0) {
+        nrf_gpio_pin_toggle(DBG_4);
+        nrf_gpio_pin_toggle(DBG_4);
+        nrf_gpio_pin_toggle(DBG_4);
+        nrf_gpio_pin_toggle(DBG_4);
         LINE_ERROR("rx err: %d", dataLeft);
         jd_diagnostics.bus_uart_error++;
         return;
@@ -214,7 +226,21 @@ void jd_rx_completed(int dataLeft) {
 
     uint16_t crc = jd_crc16((uint8_t *)frame + 2, declaredSize - 2);
     if (crc != frame->crc) {
+       
+        nrf_gpio_pin_toggle(DBG_4);
+        nrf_gpio_pin_toggle(DBG_4);
         LINE_ERROR("crc err");
+        /*
+            uint16_t crc;
+    uint8_t size;
+    uint8_t flags;
+
+    uint64_t device_identifier;
+        */
+
+       // LG_INFO("frame: crc 0x%x size %d flags 0x%x identifier 0x%llX", frame->crc, frame->size, frame->flags, frame->device_identifier);
+       // LG_INFO("check: crc 0x%x size %d data0 0x%x", crc, declaredSize - 2, ((uint8_t *)frame)[2]);
+       // LG_INFO("service: size %d index %d command 0x%x", frame->data[0], frame->data[1], (frame->data[2] << 8 | (frame->data[3])));
         jd_diagnostics.bus_uart_error++;
         return;
     }
@@ -237,7 +263,7 @@ void jd_rx_completed(int dataLeft) {
     int err = jd_rx_frame_received(frame);
 
     if (err) {
-        LINE_ERROR("drop RX");
+        LINE_ERROR("drop RX %d", err);
         jd_diagnostics.packets_dropped++;
     }
 }
